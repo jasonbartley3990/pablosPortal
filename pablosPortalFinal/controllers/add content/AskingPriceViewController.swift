@@ -17,6 +17,8 @@ class AskingPriceViewController: UIViewController, UITextFieldDelegate {
         imageView.image = UIImage(systemName: "dollarsign.circle.fill")
         imageView.tintColor = .systemGreen
         imageView.layer.masksToBounds = true
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityValue = " dollar sign image "
         return imageView
     }()
     
@@ -27,6 +29,9 @@ class AskingPriceViewController: UIViewController, UITextFieldDelegate {
         label.textAlignment = .center
         label.textColor = .systemGreen
         label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "asking price?"
+        label.accessibilityHint = "text asking you how much you want your product to be enter it in text field below"
         return label
     }()
     

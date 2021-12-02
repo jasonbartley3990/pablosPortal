@@ -23,6 +23,8 @@ class PurchasedItemsViewController: UIViewController {
         label.textColor = .label
         label.textAlignment = .center
         label.isHidden = true
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "no items purchased or an issue occured in loading"
         return label
     }()
     
@@ -33,23 +35,19 @@ class PurchasedItemsViewController: UIViewController {
         label.font = .systemFont(ofSize: 18, weight: .thin)
         label.textColor = .label
         label.textAlignment = .center
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "no items purchased"
         label.isHidden = true
         return label
     }()
     
     private var orders: [PurchaseOrder] = []
 
+    //MARK: view lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        view.addSubview(tableView)
-        view.addSubview(errorLabel)
-        view.addSubview(noItemsLabel)
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didPurchase), name: NSNotification.Name("madePurchase"), object: nil)
-                                               
+        initialSetUp()
         getOrders()
     }
     
@@ -58,6 +56,18 @@ class PurchasedItemsViewController: UIViewController {
         tableView.frame = view.bounds
         noItemsLabel.frame = CGRect(x: 10, y: (view.height - 40)/2, width: view.width - 20, height: 40)
         errorLabel.frame = CGRect(x: 10, y: (view.height - 40)/2, width: view.width - 20, height: 50)
+    }
+    
+    //MARK: set up
+    
+    private func initialSetUp() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(tableView)
+        view.addSubview(errorLabel)
+        view.addSubview(noItemsLabel)
+        tableView.delegate = self
+        tableView.dataSource = self
+        NotificationCenter.default.addObserver(self, selector: #selector(didPurchase), name: NSNotification.Name("madePurchase"), object: nil)
     }
     
     @objc func didPurchase() {

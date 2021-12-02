@@ -36,6 +36,8 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
         label.textColor = .white
         label.font = .systemFont(ofSize: 18, weight: .regular)
         label.text = "do you wish to add more photos to your post? (up to 8)\notherwise press next"
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "do you wish to add more photos to your post, you can add up to 8, other wise press next in the top right corner"
         return label
     }()
     
@@ -45,8 +47,15 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemGreen
         button.layer.cornerRadius = 8
+        button.isAccessibilityElement = true
+        button.accessibilityValue = "add"
+        button.accessibilityHint = "tap here to add photos to your post"
         return button
     }()
+    
+    
+    
+    //MARK: init
     
     init(images: [UIImage]) {
         self.images = images
@@ -57,17 +66,13 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
+    //MARK: view life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
-        view.addSubview(scrollView)
-        view.addSubview(pageControl)
-        view.addSubview(moreButton)
-        view.addSubview(label)
-        moreButton.addTarget(self, action: #selector(didTapMore), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "next", style: .done, target: self, action: #selector(didTapNext))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "cancel", style: .done, target: self, action: #selector(didTapCancel))
-        
+        initialSetUp()
         configure()
         
     }
@@ -83,24 +88,21 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
         
     }
     
-    @objc func didTapMore() {
-        let vc = uploadProductViewController(images: self.images)
-        navigationController?.pushViewController(vc, animated: true)
+    
+    
+    //MARK: set up
+    
+    private func initialSetUp() {
+        view.backgroundColor = .black
+        view.addSubview(scrollView)
+        view.addSubview(pageControl)
+        view.addSubview(moreButton)
+        view.addSubview(label)
+        moreButton.addTarget(self, action: #selector(didTapMore), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "next", style: .done, target: self, action: #selector(didTapNext))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "cancel", style: .done, target: self, action: #selector(didTapCancel))
     }
-    
-    @objc func didTapNext() {
-        let vc = AskingPriceViewController(images: images)
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc func didTapCancel() {
-        self.navigationController?.popToRootViewController(animated: true)
-    }
-    
-    
-    
-    
-    
+   
     func configure() {
         let num = images.count
         
@@ -126,7 +128,6 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 view1.addSubview(imageView1)
                 scrollView.addSubview(view1)
                 
-                
             }
             
             if x == 1 {
@@ -140,8 +141,6 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 
                 view2.addSubview(imageView2)
                 scrollView.addSubview(view2)
-                
-                
             }
             
             if x == 2 {
@@ -156,9 +155,6 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 scrollView.addSubview(view3)
                
                 imageView3.image = images[x]
-                
-                
-                
             }
             
             if x == 3 {
@@ -173,8 +169,6 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 scrollView.addSubview(view4)
                 
                 imageView4.image = images[x]
-                
-                
             }
             
             if x == 4 {
@@ -190,9 +184,6 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 
                
                 imageView5.image = images[x]
-                
-                
-                
             }
             
             if x == 5 {
@@ -207,8 +198,6 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 scrollView.addSubview(view6)
                 
                 imageView6.image = images[x]
-                
-               
             }
             
             if x == 6 {
@@ -223,9 +212,6 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 scrollView.addSubview(view7)
                 
                 imageView7.image = images[x]
-                
-                
-                
             }
             
             if x == 7 {
@@ -242,12 +228,25 @@ class uploadProductAskForMorePhotosViewController: UIViewController {
                 
                 imageView8.image = images[x]
                 
-                
             }
         }
     
 }
-
+    
+    @objc func didTapMore() {
+        let vc = uploadProductViewController(images: self.images)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func didTapNext() {
+        let vc = AskingPriceViewController(images: images)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func didTapCancel() {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
 
 
 }

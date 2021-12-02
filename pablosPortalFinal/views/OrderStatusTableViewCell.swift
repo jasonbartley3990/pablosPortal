@@ -16,6 +16,8 @@ class OrderStatusTableViewCell: UITableViewCell {
         label.textAlignment = .left
         label.textColor = .label
         label.font = .systemFont(ofSize: 18, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "your order number for order placed"
         return label
     }()
     
@@ -24,6 +26,8 @@ class OrderStatusTableViewCell: UITableViewCell {
         label.textAlignment = .left
         label.textColor = .label
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "current shipment status for order"
         return label
     }()
     
@@ -50,7 +54,11 @@ class OrderStatusTableViewCell: UITableViewCell {
     
     public func configure(with model: PurchaseOrder) {
         orderNumberLabel.text = "order: \(String(model.orderNumber))"
+        orderNumberLabel.accessibilityValue = "order number is \(model.orderNumber)"
+        
         orderStatusLabel.text = model.orderStatus
+        orderStatusLabel.accessibilityValue = "current shipment status is \(model.orderStatus)"
+        
         self.item = model
     }
 }

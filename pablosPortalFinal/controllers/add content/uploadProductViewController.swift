@@ -17,6 +17,9 @@ class uploadProductViewController: UIViewController {
         button.backgroundColor = .systemGreen
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
+        button.isAccessibilityElement = true
+        button.accessibilityValue = "tap here to select picture"
+        button.accessibilityHint = "tapping here will take you to your camera roll"
         return button
     }()
     

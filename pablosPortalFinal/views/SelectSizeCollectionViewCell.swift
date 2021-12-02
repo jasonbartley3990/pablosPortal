@@ -29,6 +29,8 @@ class SelectSizeCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         label.textColor = .label
         label.font = .systemFont(ofSize: 20, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "select size below"
         return label
     }()
     
@@ -40,6 +42,8 @@ class SelectSizeCollectionViewCell: UICollectionViewCell {
         label.isHidden = true
         label.font = .systemFont(ofSize: 18, weight: .thin)
         label.isUserInteractionEnabled = false
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "button that selects custom size for item in your cart"
         return label
     }()
     
@@ -49,6 +53,9 @@ class SelectSizeCollectionViewCell: UICollectionViewCell {
         button.setImage(image, for: .normal)
         button.isUserInteractionEnabled = true
         button.tintColor = .systemGray
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that selects size small for item in cart"
+        button.accessibilityValue = "size small"
         return button
     }()
     
@@ -58,6 +65,9 @@ class SelectSizeCollectionViewCell: UICollectionViewCell {
         button.setImage(image, for: .normal)
         button.isUserInteractionEnabled = true
         button.tintColor = .systemGray
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that selects size medium for item in cart"
+        button.accessibilityValue = "size medium"
         return button
     }()
     
@@ -67,6 +77,9 @@ class SelectSizeCollectionViewCell: UICollectionViewCell {
         button.setImage(image, for: .normal)
         button.isUserInteractionEnabled = true
         button.tintColor = .systemGray
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that selects size large for item in cart"
+        button.accessibilityValue = "size large"
         return button
     }()
     
@@ -125,6 +138,7 @@ class SelectSizeCollectionViewCell: UICollectionViewCell {
             customSizeLabel.isUserInteractionEnabled = true
             
             customSizeLabel.text = viewModel.item.customSize
+            customSizeLabel.accessibilityValue = "size of item is \(viewModel.item.customSize)"
         } else {
             print("not customed")
         }

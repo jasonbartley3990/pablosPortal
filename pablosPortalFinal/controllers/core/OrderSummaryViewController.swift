@@ -16,6 +16,8 @@ class OrderSummaryViewController: UIViewController {
         label.textAlignment = .center
         label.textColor = .label
         label.font = .systemFont(ofSize: 18, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text that shows your order number"
         return label
     }()
     
@@ -24,6 +26,8 @@ class OrderSummaryViewController: UIViewController {
         label.textAlignment = .center
         label.textColor = .label
         label.font = .systemFont(ofSize: 18, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text that shows your order status"
         return label
     }()
     
@@ -33,6 +37,8 @@ class OrderSummaryViewController: UIViewController {
         label.text = "shipped to:"
         label.textColor = .label
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "shipped to"
         return label
     }()
     
@@ -41,6 +47,8 @@ class OrderSummaryViewController: UIViewController {
         label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "first line of address shipped to"
         return label
     }()
     
@@ -49,6 +57,8 @@ class OrderSummaryViewController: UIViewController {
         label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "second line of address shippped to"
         return label
     }()
     
@@ -57,6 +67,8 @@ class OrderSummaryViewController: UIViewController {
         label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "third line of address shipped to"
         return label
     }()
     
@@ -64,10 +76,20 @@ class OrderSummaryViewController: UIViewController {
     init(purchase: PurchaseOrder) {
         self.order = purchase
         orderNumberLabel.text = "order number: \(purchase.orderNumber)"
+        orderNumberLabel.accessibilityValue = "order number \(purchase.orderNumber)"
+        
         orderStatusLabel.text = "status: \(purchase.orderStatus)"
+        orderStatusLabel.accessibilityValue = "status \(purchase.orderStatus)"
+        
         addressLine1Label.text = "\(purchase.address1), \(purchase.address2)"
+        addressLine1Label.accessibilityValue = ("\(purchase.address1) \(purchase.address2)")
+        
         addressLine2Label.text = "\(purchase.city), \(purchase.state) \(purchase.zip)"
+        addressLine2Label.accessibilityValue = "\(purchase.city) \(purchase.state) \(purchase.zip)"
+        
         addressLine3Label.text = "\(purchase.country)"
+        addressLine3Label.accessibilityValue = "\(purchase.country)"
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -84,8 +106,6 @@ class OrderSummaryViewController: UIViewController {
         view.addSubview(addressLine1Label)
         view.addSubview(addressLine2Label)
         view.addSubview(addressLine3Label)
-
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidLayoutSubviews() {
@@ -96,10 +116,5 @@ class OrderSummaryViewController: UIViewController {
         addressLine1Label.frame = CGRect(x: 7, y: shipToLabel.bottom + 5, width: view.width - 14, height: 19)
         addressLine2Label.frame = CGRect(x: 7, y: addressLine1Label.bottom + 5, width: view.width-14, height: 19)
         addressLine3Label.frame = CGRect(x: 7, y: addressLine2Label.bottom + 5, width: view.width-14, height: 19)
-        
     }
-    
-
-   
-
 }

@@ -15,6 +15,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         label.textAlignment = .center
         label.textColor = .white
         label.numberOfLines = 1
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "title that says enter address above the text fields"
+        label.accessibilityValue = "enter new address"
         return label
     }()
     
@@ -24,6 +27,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         field.keyboardType = .default
         field.returnKeyType = .next
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityHint = "a text field where you enter your first address line"
+        field.accessibilityValue = "enter address line one"
         return field
     }()
     
@@ -33,6 +39,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         field.keyboardType = .default
         field.returnKeyType = .continue
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityHint = "a text field where you enter your second address line"
+        field.accessibilityValue = "enter address line two optional"
         return field
     }()
     
@@ -42,6 +51,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         field.keyboardType = .default
         field.returnKeyType = .next
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityHint = "field where you enter the city part of address"
+        field.accessibilityValue = "enter city"
         return field
     }()
     
@@ -51,6 +63,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         field.keyboardType = .default
         field.returnKeyType = .next
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityHint = "field where you enter the state of your address"
+        field.accessibilityValue = "enter state"
         return field
     }()
     
@@ -60,6 +75,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         field.keyboardType = .default
         field.returnKeyType = .continue
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityHint = "field where you enter zip code of address"
+        field.accessibilityValue = "enter zip code"
         return field
     }()
     
@@ -69,6 +87,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         field.keyboardType = .default
         field.returnKeyType = .next
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityHint = "field where you enter the country part of your address"
+        field.accessibilityValue = "enter country"
         return field
     }()
     
@@ -94,6 +115,9 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
         countryField.delegate = self
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "save", style: .done, target: self, action: #selector(didTapSave))
+        navigationItem.rightBarButtonItem?.isAccessibilityElement = true
+        navigationItem.rightBarButtonItem?.accessibilityHint = "tap here to save"
+        navigationItem.rightBarButtonItem?.accessibilityValue = "tap here to save shipping address"
        
     }
     
@@ -135,9 +159,8 @@ class UpdateShippingViewController: UIViewController, UITextFieldDelegate {
                     self?.completion?()
                     self?.didTapClose()
                 }
-            
+            }
         }
-    }
     }
     
     @objc func didTapClose() {

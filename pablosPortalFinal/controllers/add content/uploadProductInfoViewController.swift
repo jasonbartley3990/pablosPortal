@@ -43,6 +43,8 @@ class uploadProductInfoViewController: UIViewController, UITextViewDelegate {
         label.text = "write a description about what you are selling"
         label.numberOfLines = 2
         label.font = .systemFont(ofSize: 18, weight: .light)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "write a description about what you are selling below"
         return label
     }()
     

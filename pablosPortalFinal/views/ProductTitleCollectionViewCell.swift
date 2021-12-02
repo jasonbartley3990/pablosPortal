@@ -19,6 +19,8 @@ class ProductTitleCollectionViewCell: UICollectionViewCell {
     private let label: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "displays product name"
         return label
     }()
     
@@ -38,14 +40,13 @@ class ProductTitleCollectionViewCell: UICollectionViewCell {
         
     }
     
-    
-    
     override func prepareForReuse() {
         label.text = nil
     }
     
     func configure(with viewModel: ProductTitleCollectionViewCellViewModel) {
         label.text = viewModel.title
+        label.accessibilityValue = "name of product is \(viewModel.title)"
     }
     
 }

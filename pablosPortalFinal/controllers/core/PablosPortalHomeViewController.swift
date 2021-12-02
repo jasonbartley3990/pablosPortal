@@ -6,33 +6,54 @@
 //
 
 import UIKit
-
 import AVFoundation
 import JGProgressHUD
 import FirebaseFirestore
+import UserNotifications
 
 class PablosPortalHomeViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, AVAudioPlayerDelegate {
     
-
     private var collectionView: UICollectionView?
-    
     private var productViewModels: [[HomeFeedCellType]] = []
-    
     private var currentIndex = 0
-    
     private var currentShopingCart: [String] = []
-    
     private let spinner = JGProgressHUD(style: .dark)
     
     let childVC = MusicInfoViewController()
-    
     private var player: AVAudioPlayer?
-    
     public var musicIsPlaying: Bool = false
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        initialSetUp()
+        configureCollectionView()
+        fetchProducts()
+        playMusic()
+        setUpNotifications()
+        HapticsManager.shared.prepareHaptics()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let childHeight: CGFloat = 60
+        collectionView?.frame = view.bounds
+        childVC.view.frame = CGRect(x: 10, y: self.view.height - childHeight - self.view.safeAreaInsets.bottom - 10, width: self.view.width - 20, height: childHeight)
+        childVC.view.layer.cornerRadius = 8
+        childVC.view.layer.masksToBounds = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if infoManager.shared.isHomeViewControllerNotCurrent {
+            print("continue playing music")
+        } else {
+            playMusic()
+        }
+    }
+    
+    //MARK: set up
+    
+    private func initialSetUp() {
         view.backgroundColor = .systemBackground
         title = "PABLO'S PORTAL"
         
@@ -52,32 +73,36 @@ class PablosPortalHomeViewController: UIViewController, UICollectionViewDelegate
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "music.note"), style: .done, target: self, action: #selector(didTapMusic))
         
-      
-        
-        
-        configureCollectionView()
-        fetchProducts()
-        
-        playMusic()
         
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        //let childHeight = (view.height/11)
-        let childHeight: CGFloat = 60
-        collectionView?.frame = view.bounds
-        childVC.view.frame = CGRect(x: 10, y: self.view.height - childHeight - self.view.safeAreaInsets.bottom - 10, width: self.view.width - 20, height: childHeight)
-        childVC.view.layer.cornerRadius = 8
-        childVC.view.layer.masksToBounds = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        if infoManager.shared.isHomeViewControllerNotCurrent {
-            print("continue playing music")
-        } else {
-            playMusic()
-        }
+    private func setUpNotifications() {
+        //sets a notification every two weeks
+        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.sound, .alert], completionHandler: {
+            allowed, error in
+            //no action needed
+        })
+        
+        let content = UNMutableNotificationContent()
+        content.title = "new arrivals!"
+        content.body = "check the pablos portal catalog for newly added items"
+        
+        let date = Date().addingTimeInterval(12096000)
+        
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        
+        let uuid = UUID().uuidString
+        
+        let notificationRequest = UNNotificationRequest(identifier: uuid, content: content, trigger: trigger)
+        
+        center.add(notificationRequest, withCompletionHandler: {
+            error in
+            //no action needed
+        })
     }
     
     //MARK: music integration
@@ -100,7 +125,7 @@ class PablosPortalHomeViewController: UIViewController, UICollectionViewDelegate
             
             player?.delegate = self
             
-            guard var player = player else {
+            guard let player = player else {
                 return
             }
             
@@ -111,11 +136,12 @@ class PablosPortalHomeViewController: UIViewController, UICollectionViewDelegate
             
             if infoManager.shared.playingFirstSong {
                 childVC.songName.text = "electric relaxation (cover)"
+                childVC.songName.accessibilityValue = "electric relaxation (cover)"
             } else {
                 childVC.songName.text = "montego bay"
+                childVC.songName.accessibilityValue = "montego bay"
             }
             UIView.animate(withDuration: 0.4, animations: {
-                print("did animate")
                 self.view.bringSubviewToFront(self.childVC.view)
                 self.childVC.view.alpha = 1
             })
@@ -140,7 +166,6 @@ class PablosPortalHomeViewController: UIViewController, UICollectionViewDelegate
             childVC.imageView.image = UIImage(systemName: "pause")
             
             UIView.animate(withDuration: 0.4, animations: {
-                print("did animate")
                 self.view.bringSubviewToFront(self.childVC.view)
                 self.childVC.view.alpha = 1
             })
@@ -155,7 +180,6 @@ class PablosPortalHomeViewController: UIViewController, UICollectionViewDelegate
             childVC.imageView.image = UIImage(systemName: "play")
             
             UIView.animate(withDuration: 0.4, animations: {
-                print("did animate")
                 self.view.bringSubviewToFront(self.childVC.view)
                 self.childVC.view.alpha = 1
             })
@@ -455,7 +479,7 @@ class PablosPortalHomeViewController: UIViewController, UICollectionViewDelegate
 
 extension PablosPortalHomeViewController: MultiImageViewDelegate {
     func MultiImageViewDelegateDidTapInfo(_ cell: MultiImageCollectionViewCell, index: Int) {
-        
+        print("")
     }
     
     func MultiImageViewDelegateDidScroll(_ cell: MultiImageCollectionViewCell, page: Int, index: Int) {
@@ -481,6 +505,7 @@ extension PablosPortalHomeViewController: ActionCollectionViewCellDelegate {
                     if success {
                         DispatchQueue.main.async {
                             cell.bagButton.tintColor = .systemGray
+                            HapticsManager.shared.hapticSuccess()
                         }
                         cell.isInCart = false
                         cell.updateBagImage()
@@ -505,6 +530,7 @@ extension PablosPortalHomeViewController: ActionCollectionViewCellDelegate {
                     if success {
                         DispatchQueue.main.async {
                             cell.bagButton.tintColor = .systemGreen
+                            HapticsManager.shared.hapticSuccess()
                         }
                         cell.isInCart = true
                         cell.updateBagImage()
@@ -560,7 +586,6 @@ extension PablosPortalHomeViewController: ActionCollectionViewCellDelegate {
 
 extension PablosPortalHomeViewController: MusicInfoViewDelegate {
     func MusicInfoViewDelegateDidTapClose(_ musicInfoView: MusicInfoViewController) {
-        print("did tap close")
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.4, animations: {
                 self.childVC.view.alpha = 0

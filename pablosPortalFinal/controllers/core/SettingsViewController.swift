@@ -10,7 +10,7 @@ import StoreKit
 import JGProgressHUD
 import SafariServices
 
-class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SettingsViewController: UIViewController {
     
     private var sections: [settingsSection] = []
     
@@ -22,24 +22,33 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     private let spinner = JGProgressHUD(style: .dark)
 
+    
+    //MARK: view life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "settings"
-        view.backgroundColor = .systemBackground
-        view.addSubview(tableView)
+        initialSetUp()
         configureModels()
-        tableView.delegate = self
-        tableView.dataSource = self
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapClose))
         createTableFooter()
-
-       
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
     }
+    
+    
+    //MARK: set up
+    
+    private func initialSetUp() {
+        title = "settings"
+        view.backgroundColor = .systemBackground
+        view.addSubview(tableView)
+        tableView.delegate = self
+        tableView.dataSource = self
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapClose))
+    }
+    
     
     //MARK: creating options on settings
     
@@ -136,8 +145,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }))
         present(actionSheet, animated: true)
     }
-    
-    
+}
+
+
+
+extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         sections.count
@@ -166,11 +178,4 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section].title
     }
-    
-    
-    
-    
-
-    
-
 }

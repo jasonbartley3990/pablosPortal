@@ -28,6 +28,8 @@ class MultiImageCollectionViewCell: UICollectionViewCell {
         let scrollView = UIScrollView()
         scrollView.isPagingEnabled = true
         scrollView.isUserInteractionEnabled = true
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 4
         return scrollView
     }()
     
@@ -98,10 +100,12 @@ class MultiImageCollectionViewCell: UICollectionViewCell {
             }
             
             if x == 1 {
+                
                 let view2 = UIView(frame: CGRect(x: contentView.width, y: 0, width: contentView.width, height: contentView.height))
                 view2.backgroundColor = .secondarySystemBackground
                 
                 let imageView2 = UIImageView(frame: CGRect(x: 0, y: 0, width: contentView.width, height: contentView.height))
+            
                 imageView2.contentMode = .scaleAspectFit
                 imageView2.clipsToBounds = true
                 
@@ -117,8 +121,11 @@ class MultiImageCollectionViewCell: UICollectionViewCell {
                 view3.backgroundColor = .secondarySystemBackground
                 
                 let imageView3 = UIImageView(frame: CGRect(x: 0, y: 0, width: contentView.width, height: contentView.height))
+                
                 imageView3.contentMode = .scaleAspectFit
                 imageView3.clipsToBounds = true
+                
+                
                 
                 view3.addSubview(imageView3)
                 scrollView.addSubview(view3)
@@ -276,6 +283,7 @@ class MultiImageCollectionViewCell: UICollectionViewCell {
         
        
     }
+    
 
 }
 
@@ -285,6 +293,8 @@ extension MultiImageCollectionViewCell: UIScrollViewDelegate {
         delegate?.MultiImageViewDelegateDidScroll(self, page: page, index: self.index)
         
     }
+    
+    
 }
 
 

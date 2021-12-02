@@ -11,35 +11,21 @@ import JGProgressHUD
 class ProfileViewController: UIViewController {
     
     private var user: User
-    
     private var collectionView: UICollectionView?
-    
     private var productViewModels: [HomeFeedCellType] = []
-    
     private var headerViewModel: profileHeaderViewModel?
-    
     private var currentCart: [String] = []
-    
     private var currentCartItems: [Item] = []
-    
     private let spinner = JGProgressHUD(style: .dark)
     
     private var validShipping = true
-    
     private var address1 = ""
-    
     private var address2 = ""
-    
     private var city = ""
-    
     private var zip = ""
-    
     private var state = ""
-    
     private var country = ""
-    
     private var orderTotal = 0
-    
     private var selectedSizes: [(product: String, size: String)] = []
     
     private let notSignedInlabel: UILabel = {
@@ -50,6 +36,9 @@ class ProfileViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 1
         label.isHidden = true
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "not signed in"
+        label.accessibilityHint = "text that tells you you are not signed in"
         return label
     }()
     
@@ -61,6 +50,9 @@ class ProfileViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 1
         label.isHidden = true
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "please sign in to purchase items"
+        label.accessibilityHint = "text that tells you to tap below this text on the sign in button "
         return label
     }()
     
@@ -75,6 +67,9 @@ class ProfileViewController: UIViewController {
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = false
         label.isHidden = true
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "tap here to sign in"
+        label.accessibilityHint = "tap here to sign in"
         return label
     }()
     
@@ -85,20 +80,57 @@ class ProfileViewController: UIViewController {
         return user.email.lowercased() == "pablosportal6@gmail.com"
     }
     
+    //MARK: init
+     
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
     }
     
-    
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    //MARK: view life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        initialSetUp()
+        configureNavBar()
+        configureCollectionView()
+        fetchProfileInfo()
+        HapticsManager.shared.prepareHaptics()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let childHeight = view.height/11
+        collectionView?.frame = view.bounds
+        childVC.view.frame = CGRect(x: 10, y: self.view.height - childHeight - self.view.safeAreaInsets.bottom - 10, width: self.view.width - 20, height: childHeight)
+        childVC.view.layer.cornerRadius = 8
+        childVC.view.layer.masksToBounds = true
+        
+        //not sign in views
+        let notSignedInlabelHeight: CGFloat = 35
+        let infoLabelHeight: CGFloat = 30
+        notSignedInlabel.frame = CGRect(x: 20, y: (view.height - notSignedInlabelHeight - infoLabelHeight - 55)/2, width: view.width - 40, height: notSignedInlabelHeight)
+        notSignedInInfolabel.frame = CGRect(x: 20, y: notSignedInlabel.bottom, width: view.width - 40, height: infoLabelHeight)
+        SignInLabel.frame = CGRect(x: (view.width - 170)/2, y: notSignedInInfolabel.bottom + 15, width: 170, height: 40)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        infoManager.shared.isHomeViewControllerNotCurrent = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        infoManager.shared.isHomeViewControllerNotCurrent = false
+    }
+    
+    //MARK: set up
+    
+    private func initialSetUp() {
         title = "CHECKOUT"
         view.backgroundColor = .systemBackground
         view.addSubview(notSignedInlabel)
@@ -122,36 +154,6 @@ class ProfileViewController: UIViewController {
         childVC.view.alpha = 0
         childVC.view.isUserInteractionEnabled = false
         childVC.delegate = self
-        
-        configureNavBar()
-        configureCollectionView()
-        fetchProfileInfo()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let childHeight = view.height/11
-        collectionView?.frame = view.bounds
-        childVC.view.frame = CGRect(x: 10, y: self.view.height - childHeight - self.view.safeAreaInsets.bottom - 10, width: self.view.width - 20, height: childHeight)
-        childVC.view.layer.cornerRadius = 8
-        childVC.view.layer.masksToBounds = true
-        
-        //not sign in views
-        let notSignedInlabelHeight: CGFloat = 35
-        let infoLabelHeight: CGFloat = 30
-        notSignedInlabel.frame = CGRect(x: 20, y: (view.height - notSignedInlabelHeight - infoLabelHeight - 55)/2, width: view.width - 40, height: notSignedInlabelHeight)
-        notSignedInInfolabel.frame = CGRect(x: 20, y: notSignedInlabel.bottom, width: view.width - 40, height: infoLabelHeight)
-        SignInLabel.frame = CGRect(x: (view.width - 170)/2, y: notSignedInInfolabel.bottom + 15, width: 170, height: 40)
-        
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        infoManager.shared.isHomeViewControllerNotCurrent = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        infoManager.shared.isHomeViewControllerNotCurrent = false
     }
     
     private func configureNavBar() {
@@ -160,7 +162,6 @@ class ProfileViewController: UIViewController {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAdd))
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "sign out", style: .done, target: self, action: #selector(didTapSignOut))
         } else {
-            print("not admin")
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .done, target: self, action: #selector(didTapSettings))
         }
     }
@@ -168,7 +169,6 @@ class ProfileViewController: UIViewController {
     //MARK: profile info, and grab current cart
     
     @objc func fetchProfileInfo() {
-        print("called")
         if infoManager.shared.isSignedIn {
             guard let currentEmail = UserDefaults.standard.string(forKey: "email") else {return}
             
@@ -210,7 +210,7 @@ class ProfileViewController: UIViewController {
             for item in currentCart {
                 group.enter()
                 DatabaseManager.shared.getItem(item: item, completion: {
-                    [weak self] fetchItem in
+                    fetchItem in
                     guard let fetchedItem = fetchItem else {
                         group.leave()
                         return
@@ -316,9 +316,9 @@ class ProfileViewController: UIViewController {
     
     @objc func didTapSignOut() {
         AuthManager.shared.signOut {
-            [weak self] success in
+            success in
             if success {
-                DispatchQueue.main.async { [weak self] in
+                DispatchQueue.main.async {
                     infoManager.shared.isSignedIn = false
                     infoManager.shared.currentCart.removeAll()
                     UserDefaults.standard.setValue("", forKey: "email")
@@ -345,12 +345,10 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func didChangeCartFromHome() {
-        print("running")
         fetchProfileInfo()
     }
     
     @objc func didPurchase() {
-        print("running")
         fetchProfileInfo()
     }
     
@@ -380,7 +378,6 @@ class ProfileViewController: UIViewController {
             childVC.songName.text = "montego bay"
         }
         UIView.animate(withDuration: 0.4, animations: {
-            print("did animate")
             self.view.bringSubviewToFront(self.childVC.view)
             self.childVC.view.alpha = 1
         })
@@ -518,8 +515,6 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
         guard kind == UICollectionView.elementKindSectionHeader, let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProfileHeaderCollectionReusableView.identifier, for: indexPath) as? ProfileHeaderCollectionReusableView else {
             return UICollectionReusableView()
         }
-        print("header index")
-        print(indexPath)
         if let viewModel = headerViewModel {
             headerView.configure(with: viewModel)
         }
@@ -551,16 +546,14 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
 
 extension ProfileViewController: MultiImageViewDelegate {
     func MultiImageViewDelegateDidScroll(_ cell: MultiImageCollectionViewCell, page: Int, index: Int) {
-        print("did scroll")
             let pageIndex = IndexPath(row: index + 1, section: 0)
-            guard let pageCell = collectionView?.cellForItem(at: pageIndex) as? PageTurnerCollectionViewCell else {
-                print("not a page cell")
-                return}
+            guard let pageCell = collectionView?.cellForItem(at: pageIndex) as? PageTurnerCollectionViewCell else { return }
             pageCell.pageTurner.currentPage = page
     }
     
     func MultiImageViewDelegateDidTapInfo(_ cell: MultiImageCollectionViewCell, index: Int) {
-        print("did scroll")
+        print("does nothing")
+
     }
     
     
@@ -570,7 +563,6 @@ extension ProfileViewController: MultiImageViewDelegate {
 
 extension ProfileViewController: profileHeaderCollectionReusableViewDelegate {
     func profileHeaderDidTapUpdateShipping(_ cell: ProfileHeaderCollectionReusableView) {
-        print("did tap shipping")
         let vc = UpdateShippingViewController()
         vc.completion = { [weak self] in
             self?.fetchProfileInfo()
@@ -579,7 +571,6 @@ extension ProfileViewController: profileHeaderCollectionReusableViewDelegate {
     }
     
     func profileHeaderDidTapCheckout(_ cell: ProfileHeaderCollectionReusableView) {
-        print("did tap checkout")
         guard validShipping == true else {
             let ac = UIAlertController(title: "looks like shipping needs to be updated", message: "please update shipping before checkout", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
@@ -599,6 +590,7 @@ extension ProfileViewController: profileHeaderCollectionReusableViewDelegate {
         }
         
         let vc = ConfirmOrderViewController(addressLine1: self.address1, addressLine2: self.address2, cityName: self.city, state: self.state, zip: self.zip, country: self.country, totalCost: self.orderTotal, itemsToPurchase: self.currentCartItems, sizes: self.selectedSizes)
+        HapticsManager.shared.hapticSuccess()
         navigationController?.pushViewController(vc, animated: true)
         
     }
@@ -610,6 +602,7 @@ extension ProfileViewController: profileHeaderCollectionReusableViewDelegate {
 
 extension ProfileViewController: RemoveItemFromCartCollectionViewCellDelegate {
     func RemoveItemFromCartCellDelegate(_ cell: RemoveItemFromCartCollectionViewCell, item: Item, index: Int) {
+        HapticsManager.shared.buttonHaptic()
         let ac = UIAlertController(title: "are you sure you want to remove this from your cart?", message: nil, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "yes", style: .default, handler: { [weak self] _ in
             guard let vw = self?.view else {return}
@@ -652,7 +645,6 @@ extension ProfileViewController: RemoveItemFromCartCollectionViewCellDelegate {
 
 extension ProfileViewController: MusicInfoViewDelegate {
     func MusicInfoViewDelegateDidTapClose(_ musicInfoView: MusicInfoViewController) {
-        print("did tap close")
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.4, animations: {
                 self.childVC.view.alpha = 0
@@ -670,6 +662,7 @@ extension ProfileViewController: MusicInfoViewDelegate {
 extension ProfileViewController: SelectSizeCollectionViewCellDelegate {
     func SelectSizeDidTapSmall(_ cell: SelectSizeCollectionViewCell, item: Item) {
         print("did tap small")
+        HapticsManager.shared.buttonHaptic()
         selectedSizes.removeAll(where:{ $0.product == item.productId })
         selectedSizes.append((product: item.productId, size: "small"))
         print(selectedSizes)
@@ -678,6 +671,7 @@ extension ProfileViewController: SelectSizeCollectionViewCellDelegate {
     
     func SelectSizeDidTapMedium(_ cell: SelectSizeCollectionViewCell, item: Item) {
         print("did tap medium")
+        HapticsManager.shared.buttonHaptic()
         selectedSizes.removeAll(where:{ $0.product == item.productId })
         selectedSizes.append((product: item.productId, size: "medium"))
         print(selectedSizes)
@@ -685,6 +679,7 @@ extension ProfileViewController: SelectSizeCollectionViewCellDelegate {
     
     func SelectSizeDidTapLarge(_ cell: SelectSizeCollectionViewCell, item: Item) {
         print("did tap large")
+        HapticsManager.shared.buttonHaptic()
         selectedSizes.removeAll(where:{ $0.product == item.productId })
         selectedSizes.append((product: item.productId, size: "large"))
         print(selectedSizes)
@@ -692,6 +687,7 @@ extension ProfileViewController: SelectSizeCollectionViewCellDelegate {
     
     func SelectSizeDidTapCustom(_ cell: SelectSizeCollectionViewCell, item: Item) {
         print("did tap custom")
+        HapticsManager.shared.buttonHaptic()
         selectedSizes.removeAll(where:{ $0.product == item.productId })
         guard let custom = item.customSize else {return}
         selectedSizes.append((product: item.productId, size: custom))

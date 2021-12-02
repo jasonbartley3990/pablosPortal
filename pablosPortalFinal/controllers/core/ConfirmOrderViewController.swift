@@ -15,6 +15,8 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text showing you current address entered"
         return label
     }()
     
@@ -23,6 +25,8 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text showing you current address entered"
         return label
     }()
     
@@ -31,6 +35,8 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.textColor = .label
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text showing you current address entered"
         return label
     }()
     
@@ -44,6 +50,9 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.layer.cornerRadius = 8
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "button that will purchase order"
+        label.accessibilityValue = "purchase with apple pay"
         return label
     }()
     
@@ -54,6 +63,9 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.font = .systemFont(ofSize: 18, weight: .thin)
         label.text = "confirm address"
         label.numberOfLines = 2
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text next to a check mark button that will ask you to confirm address"
+        label.accessibilityValue = "confirm address"
         return label
     }()
     
@@ -64,6 +76,9 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.font = .systemFont(ofSize: 18, weight: .thin)
         label.text = "name for the order (first and last name)"
         label.numberOfLines = 2
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "a title above the name field"
+        label.accessibilityValue = "name for order, first name and last name"
         return label
     }()
     
@@ -74,6 +89,9 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         field.returnKeyType = .continue
         field.layer.borderColor = UIColor.label.cgColor
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityHint = "fied to enter your name"
+        field.accessibilityValue = "full name"
         return field
     }()
     
@@ -82,6 +100,9 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         button.tintColor = .label
         let image = UIImage(systemName: "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))
         button.setImage(image, for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that when tapped will confirm address"
+        button.accessibilityValue = "tap here to confirm address"
         return button
     }()
     
@@ -90,8 +111,10 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.textAlignment = .center
         label.textColor = .label
         label.font = .systemFont(ofSize: 18, weight: .thin)
-        label.text = "confirm address"
+        label.text = "cost for order"
         label.numberOfLines = 2
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text that shows you current cost"
         return label
     }()
     
@@ -103,6 +126,9 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.font = .systemFont(ofSize: 18, weight: .thin)
         label.numberOfLines = 5
         label.isHidden = true
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "text that tells you that in order to purchase you need to have apple pay set up"
+        label.accessibilityValue = "Pablo's Portal uses apple pay at checkout. Please set up apple pay on your device, with one of our supported payment cards Visa, MasterCard, Discover or American Express to continue your purchase"
         return label
     }()
     
@@ -114,6 +140,9 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         label.font = .systemFont(ofSize: 18, weight: .thin)
         label.numberOfLines = 4
         label.isHidden = true
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "Looks like your device does not support Apple Pay, sorry all purchases through Pablo's Portal are made with apple pay."
+        label.accessibilityHint = "text telling you if device supports apple pay or not"
         return label
     }()
     
@@ -179,31 +208,14 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    //MARK: view life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        view.addSubview(currentAddressLine1Label)
-        view.addSubview(currentAddressLine2Label)
-        view.addSubview(currentAddressLine3Label)
-        view.addSubview(checkedButton)
-        view.addSubview(confirmAddressLabel)
-        view.addSubview(nameField)
-        view.addSubview(nameForOrderLabel)
-        view.addSubview(costLabel)
-        view.addSubview(checkOutLabel)
-        view.addSubview(needToSetUpLabel)
-        view.addSubview(deviceNotSupportedLabel)
-        
-        nameField.delegate = self
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapCheckout))
-        checkOutLabel.addGestureRecognizer(tap)
-        
-        checkedButton.addTarget(self, action: #selector(didTapConfirm), for: .touchUpInside)
-        
+        initialSetUp()
         configureCheckOutButton()
-        
-        
+        setUpAccessibilty()
     }
     
     override func viewDidLayoutSubviews() {
@@ -213,6 +225,7 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         currentAddressLine2Label.text = "\(city), \(state) \(zip)"
         currentAddressLine3Label.text = "\(country)"
         costLabel.text = "Order total: \(total).00 $"
+        costLabel.accessibilityValue = "order total \(total) dollars"
         currentAddressLine1Label.frame = CGRect(x: 7, y: view.safeAreaInsets.top + 10, width: view.width - 14, height: 19)
         currentAddressLine2Label.frame = CGRect(x: 7, y: currentAddressLine1Label.bottom + 5, width: view.width-14, height: 19)
         currentAddressLine3Label.frame = CGRect(x: 7, y: currentAddressLine2Label.bottom + 5, width: view.width-14, height: 19)
@@ -236,21 +249,47 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         infoManager.shared.isHomeViewControllerNotCurrent = false
     }
     
+    private func initialSetUp() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(currentAddressLine1Label)
+        view.addSubview(currentAddressLine2Label)
+        view.addSubview(currentAddressLine3Label)
+        view.addSubview(checkedButton)
+        view.addSubview(confirmAddressLabel)
+        view.addSubview(nameField)
+        view.addSubview(nameForOrderLabel)
+        view.addSubview(costLabel)
+        view.addSubview(checkOutLabel)
+        view.addSubview(needToSetUpLabel)
+        view.addSubview(deviceNotSupportedLabel)
+        
+        nameField.delegate = self
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapCheckout))
+        checkOutLabel.addGestureRecognizer(tap)
+        
+        checkedButton.addTarget(self, action: #selector(didTapConfirm), for: .touchUpInside)
+    }
+    
 
     @objc func didTapConfirm() {
         if didConfirm == false {
             didConfirm = true
             let checkedImage = UIImage(systemName: "checkmark.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
             DispatchQueue.main.async {
+                HapticsManager.shared.buttonHaptic()
                 self.checkedButton.setImage(checkedImage, for: .normal)
                 self.checkedButton.tintColor = .systemGreen
+                self.checkedButton.accessibilityValue = "tap here to uncomfirm address"
             }
         } else {
             didConfirm = false
             let checkedImage = UIImage(systemName: "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
             DispatchQueue.main.async {
+                HapticsManager.shared.buttonHaptic()
                 self.checkedButton.setImage(checkedImage, for: .normal)
                 self.checkedButton.tintColor = .label
+                self.checkedButton.accessibilityValue = "tap here to confirm address"
             }
         }
         
@@ -285,6 +324,7 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
             return
         }
         controller.delegate = self
+        HapticsManager.shared.buttonHaptic()
         present(controller, animated: true, completion: nil)
         
         
@@ -345,13 +385,25 @@ class ConfirmOrderViewController: UIViewController, UITextFieldDelegate {
         }
     
     }
+    
+    private func setUpAccessibilty() {
+        currentAddressLine1Label.accessibilityValue = "\(address1)"
+        currentAddressLine2Label.accessibilityValue = "\(address2)"
+        currentAddressLine3Label.accessibilityValue = "\(country)"
+        costLabel.accessibilityValue = "total cost for order is \(self.total) dollars"
+        
+        if didConfirm {
+            checkedButton.accessibilityValue = "tap here to unconfirm address"
+        } else {
+            checkedButton.accessibilityValue = "tap here to confirm address"
+        }
+        
+    }
 }
 
 extension ConfirmOrderViewController: PKPaymentAuthorizationViewControllerDelegate {
     func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
-        controller.dismiss(animated: true, completion: { [weak self] in
-            
-        })
+        controller.dismiss(animated: true, completion: { })
     }
     
     func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {

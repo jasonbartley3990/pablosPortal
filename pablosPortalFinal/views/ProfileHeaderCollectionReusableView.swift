@@ -25,6 +25,8 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         label.textColor = .label
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 18, weight: .light)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "welcome text"
         return label
     }()
     
@@ -35,6 +37,8 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         label.font = .systemFont(ofSize: 24, weight: .regular)
         label.numberOfLines = 1
         label.textColor = .label
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "displays your email"
         return label
     }()
     
@@ -42,6 +46,8 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         let button = UIButton()
         button.setTitle("update shipping", for: .normal)
         button.setTitleColor(.systemGray, for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that takes you to update shipping menu"
         return button
     }()
     
@@ -53,6 +59,8 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 18, weight: .thin)
         label.textColor = .label
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "displays subtotal for order"
         return label
     }()
     
@@ -66,6 +74,8 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         label.layer.cornerRadius = 8
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "button that takes you to the checkout screen"
         return label
     }()
     
@@ -98,13 +108,19 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     
     public func configure(with viewModel: profileHeaderViewModel) {
         emailLabel.text = viewModel.email
+        emailLabel.accessibilityValue = "current signed in as \(viewModel.email)"
+        
         costLabel.text = viewModel.checkoutString
+        costLabel.accessibilityValue = "\(viewModel.checkoutString)"
+        
         if viewModel.itemsInCart == 0 {
             checkOutLabel.isHidden = true
             updateShippingButton.isHidden = true
         } else {
             checkOutLabel.isHidden = false
+            checkOutLabel.accessibilityValue = "tap here to check out"
             updateShippingButton.isHidden = false
+            updateShippingButton.accessibilityValue = "tap here to update shipping"
         }
     }
     

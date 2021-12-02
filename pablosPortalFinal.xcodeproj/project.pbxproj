@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		72ABD5BD271997C300D9500B /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72ABD5BC271997C200D9500B /* HapticsManager.swift */; };
 		72AD09AC26B1E29E00E75DDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AD09AB26B1E29E00E75DDE /* AppDelegate.swift */; };
 		72AD09AE26B1E29E00E75DDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AD09AD26B1E29E00E75DDE /* SceneDelegate.swift */; };
 		72AD09B026B1E29E00E75DDE /* PablosPortalHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AD09AF26B1E29E00E75DDE /* PablosPortalHomeViewController.swift */; };
@@ -65,6 +66,7 @@
 
 /* Begin PBXFileReference section */
 		6770CFECDD77F6EC6DB96897 /* Pods-pablosPortalFinal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pablosPortalFinal.release.xcconfig"; path = "Target Support Files/Pods-pablosPortalFinal/Pods-pablosPortalFinal.release.xcconfig"; sourceTree = "<group>"; };
+		72ABD5BC271997C200D9500B /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		72AD09A826B1E29E00E75DDE /* pablosPortalFinal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pablosPortalFinal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72AD09AB26B1E29E00E75DDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72AD09AD26B1E29E00E75DDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				72AD09E126B1E80F00E75DDE /* DatabaseManager.swift */,
 				72AD09E526B1E86900E75DDE /* StorageManager.swift */,
 				72AD0A0726B1EE7C00E75DDE /* InfoManager.swift */,
+				72ABD5BC271997C200D9500B /* HapticsManager.swift */,
 			);
 			path = managers;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 				72AD0A1A26B1F0FA00E75DDE /* ReportAnIssueViewController.swift in Sources */,
 				72AD0A2926B46FD500E75DDE /* uploadProductSizeViewController.swift in Sources */,
 				72AD0A1026B1EF9600E75DDE /* uploadProductViewController.swift in Sources */,
+				72ABD5BD271997C300D9500B /* HapticsManager.swift in Sources */,
 				72AD09E026B1E7F100E75DDE /* AuthManager.swift in Sources */,
 				72AD0A1826B1F0A700E75DDE /* uploadProductInfoViewController.swift in Sources */,
 				72AD09DA26B1E71900E75DDE /* ProductViewModels.swift in Sources */,
@@ -603,14 +607,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = pablosPortalFinal/pablosPortalFinal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = A9GZA44T6J;
 				INFOPLIST_FILE = pablosPortalFinal/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jkbartley25-yahoo.pablosPortalFinal";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -626,14 +630,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = pablosPortalFinal/pablosPortalFinal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = A9GZA44T6J;
 				INFOPLIST_FILE = pablosPortalFinal/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jkbartley25-yahoo.pablosPortalFinal";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

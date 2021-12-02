@@ -17,6 +17,9 @@ class ReportAnIssueViewController: UIViewController, UITextViewDelegate {
         label.text = "report an issue, type what you experienced"
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 16, weight: .light)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "report an issue, type what you experience"
+        label.accessibilityHint = "text over a text field that ask you what issue you have experienced"
         return label
     }()
     
@@ -27,20 +30,19 @@ class ReportAnIssueViewController: UIViewController, UITextViewDelegate {
         textView.font = .systemFont(ofSize: 18, weight: .light)
         textView.layer.borderColor = UIColor.white.cgColor
         textView.layer.borderWidth = 0.5
+        textView.isAccessibilityElement = true
+        textView.accessibilityValue = "enter the issue you had experienced here"
         return textView
     }()
     
     private let spinner = JGProgressHUD(style: .dark)
+    
+    
+    //MARK: view lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        view.addSubview(label)
-        view.addSubview(textView)
-        textView.delegate = self
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "report", style: .done, target: self, action: #selector(didTapReport))
-
-        
+        initialSetUp()
     }
     
     override func viewDidLayoutSubviews() {
@@ -51,6 +53,15 @@ class ReportAnIssueViewController: UIViewController, UITextViewDelegate {
         
     }
     
+    //MARK: set up
+    
+    private func initialSetUp() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(label)
+        view.addSubview(textView)
+        textView.delegate = self
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "report", style: .done, target: self, action: #selector(didTapReport))
+    }
     
     
     @objc func didTapReport() {
@@ -87,9 +98,6 @@ class ReportAnIssueViewController: UIViewController, UITextViewDelegate {
                 self?.spinner.dismiss()
             }
         })
-        
-        
-        
     }
     
     private func doneReporting() {
@@ -97,8 +105,4 @@ class ReportAnIssueViewController: UIViewController, UITextViewDelegate {
             self.navigationController?.popViewController(animated: true)
         }
     }
-    
-
-    
-
 }

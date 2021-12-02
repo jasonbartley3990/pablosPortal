@@ -9,7 +9,6 @@ import UIKit
 
 protocol MusicInfoViewDelegate: AnyObject {
     func MusicInfoViewDelegateDidTapClose(_ musicInfoView: MusicInfoViewController)
-    
 }
 
 class MusicInfoViewController: UIViewController {
@@ -30,6 +29,8 @@ class MusicInfoViewController: UIViewController {
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = false
         imageView.clipsToBounds = true
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityValue = "image of a play button"
         return imageView
     }()
     
@@ -39,6 +40,9 @@ class MusicInfoViewController: UIViewController {
         label.textAlignment = .left
         label.textColor = .systemBackground
         label.font = .systemFont(ofSize: 15, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "pablos portal"
+        label.accessibilityHint = "name of person who made the song"
         return label
     }()
     
@@ -48,6 +52,8 @@ class MusicInfoViewController: UIViewController {
         label.textAlignment = .left
         label.textColor = .systemBackground
         label.font = .systemFont(ofSize: 15, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "name of song playing"
         return label
     }()
     
@@ -60,6 +66,9 @@ class MusicInfoViewController: UIViewController {
         imageView.backgroundColor = .label
         imageView.isUserInteractionEnabled = false
         imageView.clipsToBounds = true
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityValue = "close music tab"
+        imageView.accessibilityHint = "a x symbol that will close music tab"
         return imageView
     }()
 

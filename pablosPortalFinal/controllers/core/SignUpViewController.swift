@@ -16,6 +16,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         field.keyboardType = .emailAddress
         field.returnKeyType = .next
         field.autocorrectionType = .no
+        field.isAccessibilityElement = true
+        field.accessibilityValue = "enter email address here"
         return field
     }()
     
@@ -27,6 +29,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         field.returnKeyType = .continue
         field.autocorrectionType = .no
         field.isSecureTextEntry = true
+        field.isAccessibilityElement = true
+        field.accessibilityValue = "enter password here"
         return field
     }()
     
@@ -37,6 +41,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         field.returnKeyType = .continue
         field.autocorrectionType = .no
         field.isSecureTextEntry = true
+        field.isAccessibilityElement = true
+        field.accessibilityValue = "enter password again here to confirm password"
+        field.accessibilityHint = "reenter password here to validate that they match"
         return field
     }()
     
@@ -46,6 +53,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         button.backgroundColor = .systemTeal
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
+        button.isAccessibilityElement = true
+        button.accessibilityValue = "tap here to sign up"
+        button.accessibilityHint = "after completing all of the fields above tap here to create an account with that information"
         return button
     }()
     
@@ -56,6 +66,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         label.font = .systemFont(ofSize: 15, weight: .thin)
         label.text = "by signing up you agree to our terms and conditions and privacy policy"
         label.numberOfLines = 2
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "by signing up you agree to our terms and conditions and privacy policy, to agree tap the button to the left. You can read terms and conditions by tapping the button below."
         return label
     }()
     
@@ -64,6 +76,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         button.tintColor = .white
         let image = UIImage(systemName: "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
         button.setImage(image, for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityValue = "tap here to agree with terms and conditions"
         return button
     }()
     
@@ -72,15 +86,45 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         button.setTitle("view terms here", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
+        button.isAccessibilityElement = true
+        button.accessibilityValue = "tap here to view terms and conditions"
         return button
     }()
     
     private let spinner = JGProgressHUD(style: .dark)
     
     private var didAgree = false
+    
+    //MARK: view lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initialSetUp()
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let termsButtonWidth: CGFloat = 140
+        emailField.frame = CGRect(x:25, y: view.safeAreaInsets.top + 15, width: view.width-50, height: 45)
+        passwordField.frame = CGRect(x: 25, y: emailField.bottom+10, width: view.width-50, height: 45)
+        passwordReenterField.frame = CGRect(x: 25, y: passwordField.bottom + 10, width: view.width - 50, height: 45)
+        signUpButton.frame = CGRect(x: 35, y: passwordReenterField.bottom+17, width: view.width-70, height: 45)
+        checkedButton.frame = CGRect(x: 25, y: signUpButton.bottom + 18.5, width: 35, height: 35)
+        userAgreementLabel.frame = CGRect(x: 65, y: signUpButton.bottom + 16, width: view.width - 95, height: 40)
+        viewTermsButton.frame = CGRect(x: (view.width - termsButtonWidth)/2 , y: userAgreementLabel.bottom + 8, width: termsButtonWidth, height: 25)
+    }
+    
+  
+    override func viewWillAppear(_ animated: Bool) {
+        infoManager.shared.isHomeViewControllerNotCurrent = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        infoManager.shared.isHomeViewControllerNotCurrent = false
+    }
+    
+    private func initialSetUp() {
         view.backgroundColor = .black
         title = "SIGN UP"
         view.addSubview(emailField)
@@ -97,31 +141,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         checkedButton.addTarget(self, action: #selector(didTapAgree), for: .touchUpInside)
         viewTermsButton.addTarget(self, action: #selector(didTapViewTerms), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(didTapSignUp), for: .touchUpInside)
-       
-    }
-    
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let termsButtonWidth: CGFloat = 140
-        emailField.frame = CGRect(x:25, y: view.safeAreaInsets.top + 15, width: view.width-50, height: 45)
-        passwordField.frame = CGRect(x: 25, y: emailField.bottom+10, width: view.width-50, height: 45)
-        passwordReenterField.frame = CGRect(x: 25, y: passwordField.bottom + 10, width: view.width - 50, height: 45)
-        signUpButton.frame = CGRect(x: 35, y: passwordReenterField.bottom+17, width: view.width-70, height: 45)
-        checkedButton.frame = CGRect(x: 25, y: signUpButton.bottom + 18.5, width: 35, height: 35)
-        userAgreementLabel.frame = CGRect(x: 65, y: signUpButton.bottom + 16, width: view.width - 95, height: 40)
-        viewTermsButton.frame = CGRect(x: (view.width - termsButtonWidth)/2 , y: userAgreementLabel.bottom + 8, width: termsButtonWidth, height: 25)
-
-        
-    }
-    
-  
-    override func viewWillAppear(_ animated: Bool) {
-        infoManager.shared.isHomeViewControllerNotCurrent = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        infoManager.shared.isHomeViewControllerNotCurrent = false
     }
     
     
@@ -142,12 +161,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         if didAgree == false {
             didAgree = true
             let checkedImage = UIImage(systemName: "checkmark.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
+            checkedButton.accessibilityValue = "tap here to unagree with terms and conditions"
             DispatchQueue.main.async {
                 self.checkedButton.setImage(checkedImage, for: .normal)
                 self.checkedButton.tintColor = .systemGreen
             }
         } else {
             didAgree = false
+            checkedButton.accessibilityValue = "tap here to agree with terms and conditions"
             let checkedImage = UIImage(systemName: "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
             DispatchQueue.main.async {
                 self.checkedButton.setImage(checkedImage, for: .normal)
@@ -179,12 +200,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
               else {
             
             spinner.dismiss()
-            
-            let ac = UIAlertController(title: "empty fields", message: "please make sure all fields are filled out", preferredStyle: .alert )
-            ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-            DispatchQueue.main.async {
-                self.present(ac, animated: true)
-            }
+            showSignUpError(SignUpError.emptyFields)
             return
             
         }
@@ -192,12 +208,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         //password1 == password2
         
         guard password == password2 else {
-            let ac = UIAlertController(title: "passwords do not match", message: "please make sure passwords match", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-            present(ac, animated: true)
+            showSignUpError(SignUpError.passwordsDoNotMatch)
             return
         }
-        
         
         //checks regexs
         
@@ -207,41 +220,23 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         guard passwordResult else {
             spinner.dismiss()
-            //password not valid
-            let ac = UIAlertController(title: "invalid password", message: "please make sure password is longer than 8 characters, and contains at least one number, and one uppercase letter. No special charaters", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-            DispatchQueue.main.async {
-                self.present(ac, animated: true)
-            }
+            showSignUpError(SignUpError.passwordMissingRequirements)
             return
-            
         }
         
         guard emailResult else {
             //invalid email
-            DispatchQueue.main.async {
-                self.spinner.dismiss()
-                let ac = UIAlertController(title: "invalid email", message: "please make sure you entered a valid email", preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-                self.present(ac, animated: true)
-            }
+            showSignUpError(SignUpError.notAValidEmail)
             return
         }
         
         guard didAgree else {
             //the user needs to agree to terms and conditions
-            DispatchQueue.main.async {
-                self.spinner.dismiss()
-                let ac = UIAlertController(title: "please agree to terms and conditions", message: "please check the circle to agree to terms", preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-                self.present(ac, animated: true)
-            }
+            showSignUpError(SignUpError.agreeToTermsAndCond)
             return
             
         }
-        
-        
-        //checks if the username is already in use
+        //checks if the email is already in use
         
         DatabaseManager.shared.findUser(with: email, completion: {
             [weak self] user in
@@ -272,30 +267,22 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
 
             } else {
                 //email already in use
-                DispatchQueue.main.async {
-                    self?.spinner.dismiss()
-                    let ac = UIAlertController(title: "email in use", message: "pick another email", preferredStyle: .alert)
-                    ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-                    DispatchQueue.main.async {
-                        self?.present(ac, animated: true)
-                    }
-                }
+                self?.showSignUpError(SignUpError.emailAlreadyInUse)
             }
         })
     
         
     }
-    
-    //MARK: Regexs
-    
+}
 
+extension SignUpViewController {
     func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
 
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
-    
+
     func isValidPassword(_ password: String) -> Bool {
         let passwordRegEx = "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).{8,}$"
         
@@ -303,8 +290,63 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         return passwordPred.evaluate(with: password)
     }
 
-
-}
-
+    func showSignUpError(_ err: SignUpError) {
+        let ac = UIAlertController(title: err.errorDescription, message: err.errorMessage, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
+        DispatchQueue.main.async {
+            self.present(ac, animated: true)
+        }
+    }
     
+    
+    enum SignUpError: LocalizedError {
+        case emptyFields
+        case passwordTooShort
+        case passwordMissingRequirements
+        case notAValidEmail
+        case emailAlreadyInUse
+        case agreeToTermsAndCond
+        case passwordsDoNotMatch
+        
+        var errorDescription: String? {
+            switch self {
+            case .emptyFields:
+                return "Empty fields!"
+            case .passwordTooShort:
+                return "Password too short!"
+            case .passwordMissingRequirements:
+                return "Password is missing some requirements"
+            case .notAValidEmail:
+                return "Not a valid email"
+            case .emailAlreadyInUse:
+                return "Email is already in use"
+            case .agreeToTermsAndCond:
+                return "Please agree to terms and conditions"
+            case .passwordsDoNotMatch:
+                return "Passwords do not match"
+                
+            }
+        }
+        
+        var errorMessage: String? {
+            switch self {
+            
+            case .emptyFields:
+                return "Please fill in all fields"
+            case .passwordTooShort:
+                return "Password must be 8 characters long "
+            case .passwordMissingRequirements:
+                return "Password must contain one number and one uppercase letter, no special characters"
+            case .notAValidEmail:
+                return "please enter a valid email"
+            case .emailAlreadyInUse:
+                return "Please enter a new email"
+            case .agreeToTermsAndCond:
+                return "Please check the circle to agree to terms"
+            case .passwordsDoNotMatch:
+                return "Please make sure passwords match"
+            }
+        }
+    }
+}
 

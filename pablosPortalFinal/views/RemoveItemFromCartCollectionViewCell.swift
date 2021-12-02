@@ -24,6 +24,9 @@ class RemoveItemFromCartCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.setTitle("remove from cart", for: .normal)
         button.setTitleColor(.red, for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that removes item from cart"
+        button.accessibilityValue = "remove item from cart"
         return button
     }()
     

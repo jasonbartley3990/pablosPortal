@@ -13,14 +13,14 @@ class PriceCollectionViewCell: UICollectionViewCell {
     private let label: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .light)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "displays price of product"
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(label)
-        
-        
     }
     
     required init?(coder: NSCoder) {
@@ -31,9 +31,7 @@ class PriceCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         label.sizeToFit()
         label.frame = CGRect(x: (contentView.width - label.width)/2, y: 2, width: label.width , height: contentView.height)
-        
     }
-    
     
     
     override func prepareForReuse() {
@@ -42,5 +40,6 @@ class PriceCollectionViewCell: UICollectionViewCell {
     
     func configure(with viewModel: PriceCollectionViewCellViewModel) {
         label.text = "\(viewModel.price)$"
+        label.accessibilityValue = "cost of item is \(viewModel.price) dollars"
     }
 }

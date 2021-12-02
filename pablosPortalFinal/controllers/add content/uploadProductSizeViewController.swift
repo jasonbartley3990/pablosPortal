@@ -24,6 +24,8 @@ class uploadProductSizeViewController: UIViewController, UITextFieldDelegate {
         label.textColor = .white
         label.font = .systemFont(ofSize: 18, weight: .regular)
         label.text = "enter custom size"
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "enter  custom size below"
         return label
     }()
     
@@ -42,6 +44,8 @@ class uploadProductSizeViewController: UIViewController, UITextFieldDelegate {
         label.textColor = .white
         label.font = .systemFont(ofSize: 15, weight: .thin)
         label.text = "is this not custom (S, M, L)"
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "if this item does not have a custom size you can set its size to small, medium and large?"
         label.numberOfLines = 2
         return label
     }()

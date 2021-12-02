@@ -17,6 +17,8 @@ class ThankYouForPurchaseViewController: UIViewController {
         label.textAlignment = .center
         label.textColor = .label
         label.font = .systemFont(ofSize: 20, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "thank you for your purchase"
         return label
     }()
     
@@ -38,11 +40,15 @@ class ThankYouForPurchaseViewController: UIViewController {
         label.layer.cornerRadius = 8
         label.layer.masksToBounds = true
         label.isUserInteractionEnabled = true
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "click here to go back to home"
+        label.accessibilityHint = "button that takes your back to home"
         return label
     }()
     init(orderNumber: Int) {
         self.orderNum = orderNumber
         self.orderNumberLabel.text = "order number: \(orderNumber)"
+        self.orderNumberLabel.accessibilityValue = "order number \(orderNumber)"
         super.init(nibName: nil, bundle: nil)
     }
     

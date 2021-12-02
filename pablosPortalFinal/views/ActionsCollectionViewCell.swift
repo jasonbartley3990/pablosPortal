@@ -30,6 +30,8 @@ class ActionsCollectionViewCell: UICollectionViewCell {
         button.tintColor = .systemGray
         let image = UIImage(systemName: "bag", withConfiguration: UIImage.SymbolConfiguration(pointSize: 45))
         button.setImage(image, for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that adds item to cart"
         return button
     }()
     
@@ -38,6 +40,8 @@ class ActionsCollectionViewCell: UICollectionViewCell {
         button.tintColor = .systemGray
         let image = UIImage(systemName: "questionmark.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 45))
         button.setImage(image, for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that displays information about the product"
         return button
     }()
     
@@ -48,6 +52,8 @@ class ActionsCollectionViewCell: UICollectionViewCell {
         button.setImage(image, for: .normal)
         button.isHidden = true
         button.isUserInteractionEnabled = false
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "button that displays information about the product"
         return button
     }()
     
@@ -59,6 +65,8 @@ class ActionsCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         label.isHidden = true
         label.font = .systemFont(ofSize: 20, weight: .thin)
+        label.isAccessibilityElement = true
+        label.accessibilityHint = "shows that an item has been sold already"
         return label
     }()
     
@@ -101,13 +109,16 @@ class ActionsCollectionViewCell: UICollectionViewCell {
     public func configure(with viewModel: ActionsCollectionViewCellViewModel) {
         self.item = viewModel.item
         self.isInCart = viewModel.isInCart
+        infoButton.accessibilityValue = "this product is \(viewModel.item.description)"
+        
         if viewModel.isInCart {
             bagButton.tintColor = .systemGreen
-            
+            bagButton.accessibilityValue = "item is already in cart, tap here to remove from cart"
+        } else {
+            bagButton.accessibilityValue = "item is not in cart, tap here to add to cart"
         }
         
         self.isSold = viewModel.isSold
-        print("hey here: \(viewModel.isSold)")
         
         if viewModel.isSold {
             print("triggered")
@@ -119,8 +130,8 @@ class ActionsCollectionViewCell: UICollectionViewCell {
             
             secondInfoButton.isHidden = false
             soldLabel.isHidden = false
+            soldLabel.accessibilityValue = "item is sold out"
             secondInfoButton.isUserInteractionEnabled = true
-           
             
         } else {
             print("do nothing")
@@ -145,8 +156,6 @@ class ActionsCollectionViewCell: UICollectionViewCell {
         } else {
             bagButton.tintColor = .systemGray
         }
-        
-        
     }
     
     

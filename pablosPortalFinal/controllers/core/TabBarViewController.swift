@@ -20,8 +20,8 @@ class TabBarViewController: UITabBarController {
                 if success {
                     self?.needToSignIn = true
                 }})
-            return}
-        
+            return
+        }
         
         let currentUser = User(email: email)
         
@@ -38,11 +38,17 @@ class TabBarViewController: UITabBarController {
         nav1.tabBarItem = UITabBarItem(title: "HOME", image: UIImage(systemName: "globe"), tag: 1)
         nav2.tabBarItem = UITabBarItem(title: "checkout", image: UIImage(systemName: "bag.fill"), tag: 1)
         
+        nav1.isAccessibilityElement = true
+        nav2.isAccessibilityElement = true
+        
+        nav1.accessibilityHint = "takes you to the home of app to view products"
+        nav2.accessibilityHint = "takes you to you cart and profile"
+        
+        nav1.accessibilityValue = "home and products"
+        nav2.accessibilityValue = "shopping cart and profile"
+        
         self.setViewControllers([nav1, nav2], animated: false)
         
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
     }
     
 }

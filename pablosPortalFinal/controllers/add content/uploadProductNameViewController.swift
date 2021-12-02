@@ -28,6 +28,9 @@ class uploadproductNameViewController: UIViewController, UITextFieldDelegate {
         label.textColor = .white
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 18, weight: .regular)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "name of product?"
+        label.accessibilityHint = "what do you want to call your product"
         return label
     }()
     
@@ -74,6 +77,5 @@ class uploadproductNameViewController: UIViewController, UITextFieldDelegate {
         let vc = uploadProductSizeViewController(asking: self.askingprice, productImages: self.images, product: productTitle)
         navigationController?.pushViewController(vc, animated: true)
     }
-
-
+    
 }

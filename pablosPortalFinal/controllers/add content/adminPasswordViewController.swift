@@ -16,6 +16,9 @@ class adminPasswordViewController: UIViewController, UITextFieldDelegate {
         label.textAlignment = .center
         label.textColor = .white
         label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.isAccessibilityElement = true
+        label.accessibilityValue = "please enter password in textfeild below"
+        label.accessibilityHint = "please enter password in textfield below"
         return label
     }()
     
@@ -28,17 +31,15 @@ class adminPasswordViewController: UIViewController, UITextFieldDelegate {
         return textfield
     }()
     
-    
-    
     private let submitButton: UIButton = {
         let button = UIButton()
         button.setTitle("submit", for: .normal)
         button.setTitleColor(.systemGreen, for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityValue = "submit button"
+        button.accessibilityHint = "button to submit password"
         return button
     }()
-    
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,8 +49,6 @@ class adminPasswordViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(submitButton)
         submitButton.addTarget(self, action: #selector(didTapSubmitButton), for: .touchUpInside)
         passwordTextField.delegate = self
-
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidLayoutSubviews() {
@@ -78,15 +77,6 @@ class adminPasswordViewController: UIViewController, UITextFieldDelegate {
                 self?.present(ac, animated: true)
             }
         })
-        
-        
-        
-        
-        
     }
-    
-
-    
-
 }
 
